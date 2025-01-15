@@ -3,12 +3,9 @@ package model;
 import org.junit.jupiter.api.Test;
 import service.InMemoryHistoryManager;
 
-import java.util.ArrayList;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 class TaskTest {
-    InMemoryHistoryManager historyManager = new InMemoryHistoryManager();
 
     @Test
     public void shouldBeTasksEqualsIfEqualsId() {
