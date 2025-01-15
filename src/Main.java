@@ -1,4 +1,6 @@
 import model.Status;
+import service.InMemoryTaskManager;
+import service.Managers;
 import service.TaskManager;
 import model.Task;
 import model.Epic;
@@ -7,7 +9,7 @@ import model.Subtask;
 public class Main {
 
     public static void main(String[] args) {
-        TaskManager taskManager = new TaskManager();
+        TaskManager taskManager = Managers.getDefault();
 
         // проверить добавление задач
         Task task1 = new Task("title1", "description", Status.NEW);
@@ -54,7 +56,21 @@ public class Main {
         System.out.println(taskManager.getEpic(3));
         System.out.println(taskManager.getSubtasks());
 
+        // проверить работу HistoryManager
+        taskManager.getTask(1);
+        taskManager.getTask(2);
+        taskManager.getEpic(3);
+        taskManager.getSubtask(4);
 
+        taskManager.getTask(1);
+        taskManager.getTask(2);
+        taskManager.getEpic(3);
+        taskManager.getSubtask(4);
+
+        taskManager.getTask(1);
+        taskManager.getTask(10);
+
+        System.out.println(taskManager.getHistory());
 
     }
 }
