@@ -17,11 +17,11 @@ public interface TaskManager {
 
     ArrayList<Subtask> getEpicSubtasks(int epicID);
 
-    Task getTask(int ID);
+    Task getTask(int id);
 
-    Epic getEpic(int ID);
+    Epic getEpic(int id);
 
-    Subtask getSubtask(int ID);
+    Subtask getSubtask(int id);
 
     int addNewTask(Task task);
 
