@@ -47,21 +47,21 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     @Override
-    public Task getTask(int ID) {
-        if (tasks.containsKey(ID)) historyManager.addTask(tasks.get(ID));
-        return tasks.get(ID);
+    public Task getTask(int id) {
+        if (tasks.containsKey(id)) historyManager.addTask(tasks.get(id));
+        return tasks.get(id);
     }
 
     @Override
-    public Epic getEpic(int ID) {
-        if (epics.containsKey(ID)) historyManager.addTask(epics.get(ID));
-        return epics.get(ID);
+    public Epic getEpic(int id) {
+        if (epics.containsKey(id)) historyManager.addTask(epics.get(id));
+        return epics.get(id);
     }
 
     @Override
-    public Subtask getSubtask(int ID) {
-        if (subtasks.containsKey(ID)) historyManager.addTask(subtasks.get(ID));
-        return subtasks.get(ID);
+    public Subtask getSubtask(int id) {
+        if (subtasks.containsKey(id)) historyManager.addTask(subtasks.get(id));
+        return subtasks.get(id);
     }
 
     @Override
