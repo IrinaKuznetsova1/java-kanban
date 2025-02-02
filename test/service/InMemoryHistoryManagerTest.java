@@ -27,6 +27,8 @@ class InMemoryHistoryManagerTest {
         final List<Task> testHistory = historyManager.getHistory();
         assertNotNull(testHistory, "Task1 не сохранен.");
         assertEquals(1, testHistory.size(), "Task1 не сохранен.");
+        historyManager.addTask(task1);
+        assertEquals(1, testHistory.size(), "Task1 дублируется.");
     }
 
     @Test
@@ -59,17 +61,35 @@ class InMemoryHistoryManagerTest {
     }
 
     @Test
-    public void maxSizeofHistoryShouldBeTen() {
+    public void checkOrderAfterAdd() {
         Task task1 = new Task(1, "Test Title 1", "Test Description 1", Status.NEW);
-        for (int i = 1; i <= 11; i++) {
-            historyManager.addTask(task1);
-        }
-        assertEquals(10, historyManager.getHistory().size());
-
         Epic epic1 = new Epic(2, "Test Title 2", "Test Description 2");
+        Subtask subtask1 = new Subtask(3, "Test Title 3", "Test Description 3", Status.IN_PROGRESS, 2);
+        historyManager.addTask(subtask1);
         historyManager.addTask(epic1);
-        final Task savedEpic = historyManager.getHistory().get(9);
-        assertEquals(savedEpic.getId(), epic1.getId(), "ID объектов не совпадают.");
+        historyManager.addTask(task1);
+        historyManager.addTask(task1);
+        historyManager.addTask(epic1);
+        historyManager.addTask(subtask1);
+        final List<Task> testHistory = historyManager.getHistory();
+        assertEquals(task1, testHistory.get(0), "История не сохраняет задачи в порядке добавления.");
+        assertEquals(epic1, testHistory.get(1), "История не сохраняет задачи в порядке добавления.");
+        assertEquals(subtask1, testHistory.get(2), "История не сохраняет задачи в порядке добавления.");
     }
+
+    @Test
+    public void checkOrderAfterDelete() {
+        Task task1 = new Task(1, "Test Title 1", "Test Description 1", Status.NEW);
+        Epic epic1 = new Epic(2, "Test Title 2", "Test Description 2");
+        Subtask subtask1 = new Subtask(3, "Test Title 3", "Test Description 3", Status.IN_PROGRESS, 2);
+        historyManager.addTask(task1);
+        historyManager.addTask(epic1);
+        historyManager.addTask(subtask1);
+        historyManager.remove(2);
+        final List<Task> testHistory = historyManager.getHistory();
+        assertEquals(2, testHistory.size(), "Элемент не удален из списка.");
+        assertEquals(subtask1, testHistory.get(1), "После удаления элемента порядок списка некорректен.");
+    }
+
 
 }

@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,7 +37,11 @@ class InMemoryTaskManagerTest {
         final ArrayList<Task> tasks = taskManager.getTasks();
         assertNotNull(tasks, "Задачи не возвращаются.");
         assertEquals(1, tasks.size(), "Неверное количество задач.");
-        assertEquals(task1, tasks.get(0), "Задачи не совпадают.");
+        assertEquals(task1, tasks.getFirst(), "Задачи не совпадают.");
+
+        final List<Task> history = taskManager.getHistory();
+        assertEquals(1, history.size(), "Неверное количество задач в истории.");
+        assertEquals(task1, history.getFirst(), "Задача не сохраняется в истории.");
     }
 
     @Test
@@ -50,7 +55,11 @@ class InMemoryTaskManagerTest {
         final ArrayList<Epic> epics = taskManager.getEpics();
         assertNotNull(epics, "Эпики не возвращаются.");
         assertEquals(1, epics.size(), "Неверное количество эпиков.");
-        assertEquals(epic1, epics.get(0), "Эпики не совпадают.");
+        assertEquals(epic1, epics.getFirst(), "Эпики не совпадают.");
+
+        final List<Task> history = taskManager.getHistory();
+        assertEquals(1, history.size(), "Неверное количество эпиков в истории.");
+        assertEquals(epic1, history.getFirst(), "Эпик не сохраняется в истории.");
     }
 
     @Test
@@ -66,7 +75,11 @@ class InMemoryTaskManagerTest {
         final ArrayList<Subtask> subtasks = taskManager.getSubtasks();
         assertNotNull(subtasks, "Подзадачи не возвращаются.");
         assertEquals(1, subtasks.size(), "Неверное количество подзадач.");
-        assertEquals(subtask1, subtasks.get(0), "Подзадачи не совпадают.");
+        assertEquals(subtask1, subtasks.getFirst(), "Подзадачи не совпадают.");
+
+        final List<Task> history = taskManager.getHistory();
+        assertEquals(2, history.size(), "Неверное количество подзадач в истории.");
+        assertEquals(subtask1, history.get(1), "Подзадача не сохраняется в истории.");
     }
 
     @Test
@@ -75,7 +88,8 @@ class InMemoryTaskManagerTest {
         final int idTask1 = taskManager.addNewTask(task1);
         Task task2 = new Task(1, "Test Title2", "Test Description2", Status.DONE);
         final int idTask2 = taskManager.addNewTask(task2);
-        assertNotEquals(idTask1, idTask2, "Id для task2 не сгенерирован.");
+        assertEquals(1, idTask1, "ID для Task1 не сгенерирован.");
+        assertEquals(-1, idTask2, "Task 2 с заданным вручную id сохранилась в taskManager.");
     }
 
     @Test
@@ -96,6 +110,7 @@ class InMemoryTaskManagerTest {
         taskManager.addNewEpic(epic1);
         Subtask subtask1 = new Subtask("Test Title", "Test Description", Status.DONE, epic1.getId());
         taskManager.addNewSubtask(subtask1);
+        epic1 = taskManager.getEpic(1);
         assertEquals(epic1.getStatus(), Status.DONE, "Статус эпика не изменился.");
     }
 
@@ -114,13 +129,34 @@ class InMemoryTaskManagerTest {
     }
 
     @Test
-    public void removeEpic() {
+    public void deleteEpic() {
         Epic epic1 = new Epic("Test Title", "Test Description");
         final int epic1Id = taskManager.addNewEpic(epic1);
-        Subtask subtask1 = new Subtask("Test Title", "Test Description", Status.DONE, epic1.getId());
+        Subtask subtask1 = new Subtask("Test Title", "Test Description", Status.DONE, epic1Id);
         final int subtask1Id = taskManager.addNewSubtask(subtask1);
+        List<Task> history = taskManager.getHistory();
+        assertEquals(1, history.size(), "Неверное количество эпиков в истории.");
         taskManager.deleteEpic(epic1Id);
+        history = taskManager.getHistory();
+        assertEquals(0, history.size(), "Неверное количество эпиков после удаления в истории.");
         assertNull(taskManager.getEpic(epic1Id), "Эпик не удален.");
         assertNull(taskManager.getSubtask(subtask1Id), "При удалении эпика подзадача не удаляется.");
+    }
+
+    @Test
+    public void deleteSubtask() {
+        Epic epic1 = new Epic("Test Title", "Test Description");
+        final int epic1Id = taskManager.addNewEpic(epic1);
+        Subtask subtask1 = new Subtask("Test Title", "Test Description", Status.DONE, epic1Id);
+        final int subtask1Id = taskManager.addNewSubtask(subtask1);
+        final Subtask subtask = taskManager.getSubtask(subtask1Id);
+        taskManager.deleteSubtask(subtask1Id);
+        List<Task> history = taskManager.getHistory();
+        epic1 = taskManager.getEpic(1);
+
+        assertNull(taskManager.getSubtask(subtask1Id), "Подзадача не удалена.");
+        assertFalse(epic1.getSubtasksID().contains(subtask1Id), "Подзадача не удалена из эпика.");
+        assertFalse(history.contains(subtask), "Подзадача не удалена из истории.");
+        assertEquals(Status.NEW, epic1.getStatus(), "Статус эпика после удаления подзадачи не изменился");
     }
 }

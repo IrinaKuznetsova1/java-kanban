@@ -13,6 +13,10 @@ public class Epic extends Task {
         super(id,title, description, Status.NEW);
     }
 
+    public Epic(int id, String title, String description, Status status) {
+        super(id,title, description, status);
+    }
+
     public void addIdSubtask(int idSubtask) {
         if (idSubtask != id) {
             listSubtaskID.add(idSubtask);
@@ -38,5 +42,10 @@ public class Epic extends Task {
     @Override
     public String toString() {
         return "эпик №" + id + " \"" + title + "\", описание: " + description + "\", статус \"" + status + ", ID подзадач: " + listSubtaskID + "\n";
+    }
+
+    @Override
+    public void setStatus(Status status) {
+        System.out.println("Статус эпика изменить нельзя.");
     }
 }

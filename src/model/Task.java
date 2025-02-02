@@ -24,7 +24,7 @@ public class Task {
     }
 
     public void setTitle(String title) {
-        this.title = title;
+        if (this.title == null || this.title.isEmpty()) this.title = title;
     }
 
     public String getDescription() {
@@ -32,7 +32,7 @@ public class Task {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        if (this.description == null || this.description.isEmpty()) this.description = description;
     }
 
     public Status getStatus() {
@@ -48,7 +48,7 @@ public class Task {
     }
 
     public void setId(int id) {
-        this.id = id;
+        if (this.id == 0) this.id = id;
     }
 
     @Override
