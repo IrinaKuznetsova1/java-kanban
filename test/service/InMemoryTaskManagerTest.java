@@ -78,8 +78,8 @@ class InMemoryTaskManagerTest {
         assertEquals(subtask1, subtasks.getFirst(), "Подзадачи не совпадают.");
 
         final List<Task> history = taskManager.getHistory();
-        assertEquals(2, history.size(), "Неверное количество подзадач в истории.");
-        assertEquals(subtask1, history.get(1), "Подзадача не сохраняется в истории.");
+        assertEquals(1, history.size(), "Неверное количество подзадач в истории.");
+        assertEquals(subtask1, history.getFirst(), "Подзадача не сохраняется в истории.");
     }
 
     @Test
@@ -134,6 +134,7 @@ class InMemoryTaskManagerTest {
         final int epic1Id = taskManager.addNewEpic(epic1);
         Subtask subtask1 = new Subtask("Test Title", "Test Description", Status.DONE, epic1Id);
         final int subtask1Id = taskManager.addNewSubtask(subtask1);
+        taskManager.getEpic(epic1.getId());
         List<Task> history = taskManager.getHistory();
         assertEquals(1, history.size(), "Неверное количество эпиков в истории.");
         taskManager.deleteEpic(epic1Id);
