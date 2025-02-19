@@ -2,6 +2,7 @@ package model;
 
 public class Subtask extends Task {
     private final int idEpic;
+    private final Type type = Type.SUBTASK;
 
     public Subtask(String title, String description, Status status, int idEpic) {
         super(title, description, status);
@@ -19,7 +20,7 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return "подзадача №" + id + " \"" + title + "\", описание: " + description + "\", статус \"" + status  + "\" ID эпика - " + idEpic + "\n";
+        return type + " №" + id + " \"" + title + "\", описание: \"" + description + "\", статус \"" + status  + "\", ID эпика - " + idEpic + "\n";
     }
 }
 
