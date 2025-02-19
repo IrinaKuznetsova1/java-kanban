@@ -10,7 +10,11 @@ public class Epic extends Task {
     }
 
     public Epic(int id, String title, String description) {
-        super(id,title, description, Status.NEW);
+        super(id, title, description, Status.NEW);
+    }
+
+    public Epic(int id, String title, String description, Status status) {
+        super(id, title, description, status);
     }
 
     public void addIdSubtask(int idSubtask) {

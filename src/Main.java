@@ -1,5 +1,4 @@
 import model.Status;
-import service.InMemoryTaskManager;
 import service.Managers;
 import service.TaskManager;
 import model.Task;
@@ -23,11 +22,11 @@ public class Main {
         taskManager.addNewSubtask(subtask1);
         Subtask subtask2 = new Subtask("title5", "description", Status.NEW, epic1.getId());
         taskManager.addNewSubtask(subtask2);
-
-        Epic epic2 = new Epic("title6", "description");
-        taskManager.addNewEpic(epic2);
-        Subtask subtask3 = new Subtask("title7", "description", Status.DONE, epic2.getId());
+        Subtask subtask3 = new Subtask("title6", "description", Status.DONE, epic1.getId());
         taskManager.addNewSubtask(subtask3);
+
+        Epic epic2 = new Epic("title7", "description");
+        taskManager.addNewEpic(epic2);
 
         // проверить сохранение задач
         System.out.println(taskManager.getTasks());
@@ -35,10 +34,10 @@ public class Main {
         System.out.println(taskManager.getSubtasks());
 
         // проверить обновление задач
-        task1 = new  Task(1,"title1", "description", Status.DONE);
+        task1 = new Task(1, "title1", "description", Status.DONE);
         taskManager.updateTask(task1);
         System.out.println(taskManager.getTask(1));
-        subtask2 = new Subtask(5,"title5", "description", Status.DONE, epic1.getId());
+        subtask2 = new Subtask(5, "title5", "description", Status.DONE, epic1.getId());
         taskManager.updateSubtask(subtask2);
         System.out.println(taskManager.getEpic(3));
         System.out.println(taskManager.getSubtask(5));
@@ -47,8 +46,9 @@ public class Main {
         taskManager.deleteTask(2);
         System.out.println(taskManager.getTask(2));
 
+        System.out.println(taskManager.getEpic(3));
         taskManager.deleteSubtask(5);
-        System.out.println(epic1);
+        System.out.println(taskManager.getEpic(3));
         System.out.println(taskManager.getSubtasks());
         System.out.println(taskManager.getSubtask(5));
 
@@ -66,11 +66,13 @@ public class Main {
         taskManager.getTask(2);
         taskManager.getEpic(3);
         taskManager.getSubtask(4);
+        taskManager.getSubtask(5);
+        taskManager.getSubtask(6);
+        taskManager.getEpic(7);
 
-        taskManager.getTask(1);
         taskManager.getTask(10);
 
+        taskManager.deleteEpic(3);
         System.out.println(taskManager.getHistory());
-
     }
 }
