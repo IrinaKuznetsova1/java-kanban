@@ -30,7 +30,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
             final String idsHistory = readLines.removeLast();
             readLines.removeFirst();
             addTasks(readLines, idsHistory, restoredTaskManager);
-            restoredTaskManager.generateID = readLines.size();
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка при чтении файла - " + e.getMessage());
         }
@@ -38,35 +37,32 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     }
 
     private static void addTasks(List<String> tasksList, String idsHistory, FileBackedTaskManager tm) {
-        final Map<Integer, Task> tasks = tm.tasks;
-        final Map<Integer, Epic> epics = tm.epics;
-        final Map<Integer, Subtask> subtasks = tm.subtasks;
-
         for (String t : tasksList) {
             final Task task = CSVTaskFormat.taskFromString(t);
             final int id = task.getId();
+            if (tm.generateID < id) tm.generateID = id;
             if (task instanceof Epic epic) {
-                epics.put(id, epic);
+                tm.epics.put(id, epic);
             } else if (task instanceof Subtask subtask) {
-                subtasks.put(id, subtask);
-                final Epic epic = epics.get(subtask.getIdEpic());
+                tm.subtasks.put(id, subtask);
+                final Epic epic = tm.epics.get(subtask.getIdEpic());
                 epic.addIdSubtask(subtask.getId());
             } else {
-                tasks.put(id, task);
+                tm.tasks.put(id, task);
             }
         }
 
         final List<Integer> idsList = CSVTaskFormat.historyFromString(idsHistory);
         if (idsList.isEmpty()) return;
         for (Integer id : idsList) {
-            if (tasks.containsKey(id)) {
-                tm.historyManager.addTask(tasks.get(id));
+            if (tm.tasks.containsKey(id)) {
+                tm.historyManager.addTask(tm.tasks.get(id));
             }
-            if (epics.containsKey(id)) {
-                tm.historyManager.addTask(epics.get(id));
+            if (tm.epics.containsKey(id)) {
+                tm.historyManager.addTask(tm.epics.get(id));
             }
-            if (subtasks.containsKey(id)) {
-                tm.historyManager.addTask(subtasks.get(id));
+            if (tm.subtasks.containsKey(id)) {
+                tm.historyManager.addTask(tm.subtasks.get(id));
             }
         }
     }

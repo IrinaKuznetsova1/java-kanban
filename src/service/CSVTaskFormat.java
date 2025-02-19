@@ -9,14 +9,11 @@ import java.util.List;
 public class CSVTaskFormat {
 
     public static String taskToString(Task task) {
-        if (task instanceof Epic) {
-            return task.getId() + "," + Type.EPIC + "," + task.getTitle() + "," + task.getStatus() + ","
-                    + task.getDescription();
-        } else if (task instanceof Subtask) {
-            return task.getId() + "," + Type.SUBTASK + "," + task.getTitle() + "," + task.getStatus() + ","
+        if (task instanceof Subtask) {
+            return task.getId() + "," + task.getType() + "," + task.getTitle() + "," + task.getStatus() + ","
                     + task.getDescription() + "," + ((Subtask) task).getIdEpic();
         } else {
-            return task.getId() + "," + Type.TASK + "," + task.getTitle() + "," + task.getStatus() + ","
+            return task.getId() + "," + task.getType() + "," + task.getTitle() + "," + task.getStatus() + ","
                     + task.getDescription();
         }
     }

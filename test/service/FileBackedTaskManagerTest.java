@@ -64,11 +64,26 @@ class FileBackedTaskManagerTest {
 
         Task task1 = restoredTM.getTask(1);
         assertEquals(task.getId(), task1.getId(), "ID task и task1 после загрузки TM из файла test.csv не совпадают.");
+        assertEquals(task.getTitle(), task1.getTitle(), "title task и task1 после загрузки TM из файла test.csv не совпадают.");
+        assertEquals(task.getDescription(), task1.getDescription(), "description после загрузки TM из файла test.csv не совпадают.");
+        assertEquals(task.getStatus(), task1.getStatus(), "status task и task1 после загрузки TM из файла test.csv не совпадают.");
+        assertEquals(task.getType(), task1.getType(), "type task и task1 после загрузки TM из файла test.csv не совпадают.");
+
         Epic epic1 = restoredTM.getEpic(2);
         assertEquals(epic.getId(), epic1.getId(), "ID epic и epic1 после загрузки TM из файла test.csv не совпадают.");
         assertEquals(epic.getSubtasksID().getFirst(), epic1.getSubtasksID().getFirst(), "ID подзадач epic и epic1 после загрузки TM из файла test.csv не совпадают.");
+        assertEquals(epic.getTitle(), epic1.getTitle(), "title epic и epic1 после загрузки TM из файла test.csv не совпадают.");
+        assertEquals(epic.getDescription(), epic1.getDescription(), "description epic и epic1 после загрузки TM из файла test.csv не совпадают.");
+        assertEquals(epic.getStatus(), epic1.getStatus(), "status epic и epic1 после загрузки TM из файла test.csv не совпадают.");
+        assertEquals(epic.getType(), epic1.getType(), "type epic и epic1 после загрузки TM из файла test.csv не совпадают.");
+
         Subtask subtask1 = restoredTM.getSubtask(3);
         assertEquals(subtask.getId(), subtask1.getId(), "ID subtask и subtask1 после загрузки TM из файла test.csv не совпадают.");
+        assertEquals(subtask.getTitle(), subtask1.getTitle(), "title subtask и subtask1 после загрузки TM из файла test.csv не совпадают.");
+        assertEquals(subtask.getDescription(), subtask1.getDescription(), "description subtask и subtask1 после загрузки TM из файла test.csv не совпадают.");
+        assertEquals(subtask.getStatus(), subtask1.getStatus(), "status subtask и subtask1 после загрузки TM из файла test.csv не совпадают.");
+        assertEquals(subtask.getType(), subtask1.getType(), "type subtask и subtask1 после загрузки TM из файла test.csv не совпадают.");
+        assertEquals(subtask.getIdEpic(), subtask1.getIdEpic(), "idEpic subtask и subtask1 после загрузки TM из файла test.csv не совпадают.");
 
         List<Task> testHistory = restoredTM.getHistory();
         Task task2 = testHistory.getFirst();

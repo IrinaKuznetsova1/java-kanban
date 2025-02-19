@@ -7,7 +7,6 @@ public class Task {
     protected String description;
     protected Status status;
     protected int id;
-    private final Type type = Type.TASK;
 
     public Task(String title, String description, Status status) {
         this.title = title;
@@ -53,7 +52,7 @@ public class Task {
     }
 
     public Type getType() {
-        return type;
+        return Type.TASK;
     }
 
     @Override
@@ -71,6 +70,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return type + " №" + id + " \"" + title + "\", описание: \"" + description + "\", статус \"" + status + "\"\n";
+        return getType() + " №" + id + " \"" + title + "\", описание: \"" + description + "\", статус \"" + status + "\"\n";
     }
 }
