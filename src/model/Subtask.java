@@ -18,8 +18,13 @@ public class Subtask extends Task {
     }
 
     @Override
+    public Type getType() {
+        return Type.SUBTASK;
+    }
+
+    @Override
     public String toString() {
-        return "подзадача №" + id + " \"" + title + "\", описание: " + description + "\", статус \"" + status  + "\" ID эпика - " + idEpic + "\n";
+        return getType() + " №" + id + " \"" + title + "\", описание: \"" + description + "\", статус \"" + status + "\", ID эпика - " + idEpic + "\n";
     }
 }
 

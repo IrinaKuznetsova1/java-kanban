@@ -51,6 +51,10 @@ public class Task {
         if (this.id == 0) this.id = id;
     }
 
+    public Type getType() {
+        return Type.TASK;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -66,6 +70,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return "задача №" + id + " \"" + title + "\", описание: " + description + "\", статус \"" + status + "\n";
+        return getType() + " №" + id + " \"" + title + "\", описание: \"" + description + "\", статус \"" + status + "\"\n";
     }
 }

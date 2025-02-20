@@ -40,7 +40,12 @@ public class Epic extends Task {
     }
 
     @Override
+    public Type getType() {
+        return Type.EPIC;
+    }
+
+    @Override
     public String toString() {
-        return "эпик №" + id + " \"" + title + "\", описание: " + description + "\", статус \"" + status + ", ID подзадач: " + listSubtaskID + "\n";
+        return getType() + " №" + id + " \"" + title + "\", описание: \"" + description + "\", статус \"" + status + "\", ID подзадач: " + listSubtaskID + "\n";
     }
 }
