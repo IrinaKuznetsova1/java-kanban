@@ -1,5 +1,8 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
@@ -7,15 +10,19 @@ public class Task {
     protected String description;
     protected Status status;
     protected int id;
+    protected Duration duration = Duration.ZERO;
+    protected LocalDateTime startTime;
 
-    public Task(String title, String description, Status status) {
+    public Task(String title, String description, Status status, Duration duration, LocalDateTime startTime) {
         this.title = title;
         this.description = description;
         this.status = status;
+        setDuration(duration);
+        setStartTime(startTime);
     }
 
-    public Task(int id, String title, String description, Status status) {
-        this(title, description, status);
+    public Task(int id, String title, String description, Status status, Duration duration, LocalDateTime startTime) {
+        this(title, description, status, duration, startTime);
         this.id = id;
     }
 
@@ -55,6 +62,42 @@ public class Task {
         return Type.TASK;
     }
 
+    public LocalDateTime getStartTime() {
+        return startTime;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
+        if (startTime != null)
+            this.startTime = startTime;
+    }
+
+    public Duration getDuration() {
+        return duration;
+    }
+
+    public void setDuration(Duration duration) {
+        if (duration != null)
+            this.duration = duration;
+    }
+
+    public LocalDateTime getEndTime() {
+        return startTime.plus(duration);
+    }
+
+    public String dateToString(LocalDateTime date) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        return date.format(formatter);
+    }
+
+    public void copyFields(Task task) {
+        setTitle(task.title);
+        setId(task.id);
+        setDescription(task.description);
+        setStatus(task.status);
+        setDuration(task.duration);
+        setStartTime(task.startTime);
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -70,6 +113,7 @@ public class Task {
 
     @Override
     public String toString() {
-        return getType() + " №" + id + " \"" + title + "\", описание: \"" + description + "\", статус \"" + status + "\"\n";
+        return getType() + " №" + id + " \"" + title + "\", описание: \"" + description + "\", статус \"" + status
+                + "\", начало: " + dateToString(startTime) + ", продолжительность: " + duration.toMinutes() + " мин.\n";
     }
 }

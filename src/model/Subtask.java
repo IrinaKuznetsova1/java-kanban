@@ -1,15 +1,18 @@
 package model;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 public class Subtask extends Task {
     private final int idEpic;
 
-    public Subtask(String title, String description, Status status, int idEpic) {
-        super(title, description, status);
+    public Subtask(String title, String description, Status status, int idEpic, Duration duration, LocalDateTime startTime) {
+        super(title, description, status, duration, startTime);
         this.idEpic = idEpic;
     }
 
-    public Subtask(int id, String title, String description, Status status, int idEpic) {
-        this(title, description, status, idEpic);
+    public Subtask(int id, String title, String description, Status status, int idEpic, Duration duration, LocalDateTime startTime) {
+        this(title, description, status, idEpic, duration, startTime);
         this.id = id;
     }
 
@@ -24,7 +27,9 @@ public class Subtask extends Task {
 
     @Override
     public String toString() {
-        return getType() + " №" + id + " \"" + title + "\", описание: \"" + description + "\", статус \"" + status + "\", ID эпика - " + idEpic + "\n";
+        return getType() + " №" + id + " \"" + title + "\", описание: \"" + description + "\", статус \"" + status
+                + "\", ID эпика - " + idEpic + ", начало: " + dateToString(startTime) + ", продолжительность: "
+                + duration.toMinutes() + " мин.\n";
     }
 }
 
