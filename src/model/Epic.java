@@ -16,8 +16,8 @@ public class Epic extends Task {
         super(id, title, description, Status.NEW, Duration.ZERO, LocalDateTime.of(1, 1, 1, 0, 0));
     }
 
-    public Epic(int id, String title, String description, Status status, Duration duration, LocalDateTime startTime
-            , LocalDateTime endTime) {
+    public Epic(int id, String title, String description, Status status, Duration duration, LocalDateTime startTime,
+                LocalDateTime endTime) {
         super(id, title, description, status, duration, startTime);
         this.endTime = endTime;
     }

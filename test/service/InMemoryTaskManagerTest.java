@@ -24,8 +24,8 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
 
     @Test
     protected void shouldBeNullIfSubtasksIdEqualsEpicsId() {
-        final Subtask subtask2 = new Subtask("Test Title 1", "Test Description 1", Status.NEW, 1
-                , Duration.ZERO, LocalDateTime.of(1, 1, 1, 1, 1));
+        final Subtask subtask2 = new Subtask("Test Title 1", "Test Description 1", Status.NEW,
+                1, Duration.ZERO, LocalDateTime.of(1, 1, 1, 1, 1));
         assertEquals(-1, tm.addNewSubtask(subtask2), "Подзадачу можно сделать своим же эпиком.");
     }
 
@@ -33,10 +33,10 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     protected void generateTaskId() {
         tm.deleteTasks();
         tm.generateID = 0;
-        Task task3 = new Task("Test Title2", "Test Description2", Status.DONE
-                , Duration.ZERO, LocalDateTime.of(1, 1, 1, 1, 1));
-        Task task2 = new Task(105, "Test Title2", "Test Description2", Status.DONE
-                , Duration.ZERO, LocalDateTime.of(1, 1, 1, 1, 1));
+        Task task3 = new Task("Test Title2", "Test Description2", Status.DONE,
+                Duration.ZERO, LocalDateTime.of(1, 1, 1, 1, 1));
+        Task task2 = new Task(105, "Test Title2", "Test Description2", Status.DONE,
+                Duration.ZERO, LocalDateTime.of(1, 1, 1, 1, 1));
         assertEquals(1, tm.addNewTask(task3), "ID для task3 не сгенерирован.");
         assertEquals(-1, tm.addNewTask(task2), "Task 2 с заданным вручную id сохранилась в taskManager.");
     }
@@ -45,10 +45,10 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     protected void calculateStatusEpic() {
         Epic epic = new Epic("epic", "");
         int idEpic = tm.addNewEpic(epic);
-        Subtask sub1 = new Subtask("sub1", "", Status.IN_PROGRESS, idEpic, Duration.ofHours(100)
-                , LocalDateTime.of(3000, 1, 1, 1, 1));
-        Subtask sub2 = new Subtask("sub2", "", Status.IN_PROGRESS, idEpic, Duration.ofHours(100)
-                , LocalDateTime.of(1000, 1, 1, 1, 1));
+        Subtask sub1 = new Subtask("sub1", "", Status.IN_PROGRESS, idEpic, Duration.ofHours(100),
+                LocalDateTime.of(3000, 1, 1, 1, 1));
+        Subtask sub2 = new Subtask("sub2", "", Status.IN_PROGRESS, idEpic, Duration.ofHours(100),
+                LocalDateTime.of(1000, 1, 1, 1, 1));
 
         // Проверить расчета статуса
         tm.addNewSubtask(sub1);
@@ -69,8 +69,8 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         assertEquals(Status.IN_PROGRESS, epic.getStatus(), "Неверно рассчитан статус IN_PROGRESS");
 
         // Проверить расчет startTime, duration, EndTime
-        Subtask sub3 = new Subtask("sub3", "", Status.IN_PROGRESS, idEpic, Duration.ofHours(100)
-                , LocalDateTime.of(2000, 1, 1, 1, 1));
+        Subtask sub3 = new Subtask("sub3", "", Status.IN_PROGRESS, idEpic, Duration.ofHours(100),
+                LocalDateTime.of(2000, 1, 1, 1, 1));
         tm.addNewSubtask(sub3);
         assertEquals(sub2.getStartTime(), epic.getStartTime(), "startTime epic рассчитывается неверно.");
         assertEquals(Duration.ofHours(300), epic.getDuration(), "duration epic рассчитывается неверно.");

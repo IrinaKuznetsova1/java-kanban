@@ -17,11 +17,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 abstract class TaskManagerTest<T extends TaskManager> {
     protected T tm;
-    protected Task task1 = new Task("Title Task1", "Description Task1", Status.NEW, Duration.ofHours(24)
-            , LocalDateTime.of(2000, 2, 2, 0, 0));
+    protected Task task1 = new Task("Title Task1", "Description Task1", Status.NEW, Duration.ofHours(24),
+            LocalDateTime.of(2000, 2, 2, 0, 0));
     protected Epic epic1 = new Epic("Title Epic1", "Description Epic1");
-    protected Subtask subtask1 = new Subtask("Title Subtask1", "Description Subtask1", Status.IN_PROGRESS, 2
-            , Duration.ofHours(24), LocalDateTime.of(2222, 2, 2, 0, 0));
+    protected Subtask subtask1 = new Subtask("Title Subtask1", "Description Subtask1", Status.IN_PROGRESS,
+            2, Duration.ofHours(24), LocalDateTime.of(2222, 2, 2, 0, 0));
 
     @BeforeEach
     protected void init() {
