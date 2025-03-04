@@ -185,23 +185,23 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         TaskManager taskManager = Managers.getDefault();
 
         // добавление задач в taskManager
-        Task task1 = new Task("title1", "description", Status.NEW, Duration.ofSeconds(60)
-                , LocalDateTime.of(1, 1, 1, 1, 1));
+        Task task1 = new Task("title1", "description", Status.NEW, Duration.ofSeconds(60),
+                LocalDateTime.of(1, 1, 1, 1, 1));
         taskManager.addNewTask(task1);
-        Task task2 = new Task("title2", "description", Status.IN_PROGRESS, Duration.ofSeconds(60)
-                , LocalDateTime.of(2, 2, 2, 1, 1));
+        Task task2 = new Task("title2", "description", Status.IN_PROGRESS, Duration.ofSeconds(60),
+                LocalDateTime.of(2, 2, 2, 1, 1));
         taskManager.addNewTask(task2);
 
         Epic epic1 = new Epic("title3", "description");
         taskManager.addNewEpic(epic1);
-        Subtask subtask1 = new Subtask("title4", "description", Status.DONE, epic1.getId()
-                , Duration.ofSeconds(60), LocalDateTime.of(3, 3, 3, 1, 1));
+        Subtask subtask1 = new Subtask("title4", "description", Status.DONE, epic1.getId(),
+                Duration.ofSeconds(60), LocalDateTime.of(3, 3, 3, 1, 1));
         taskManager.addNewSubtask(subtask1);
-        Subtask subtask2 = new Subtask("title5", "description", Status.NEW, epic1.getId()
-                , Duration.ofSeconds(60), LocalDateTime.of(4, 4, 4, 1, 1));
+        Subtask subtask2 = new Subtask("title5", "description", Status.NEW, epic1.getId(),
+                Duration.ofSeconds(60), LocalDateTime.of(4, 4, 4, 1, 1));
         taskManager.addNewSubtask(subtask2);
-        Subtask subtask3 = new Subtask("title6", "description", Status.DONE, epic1.getId()
-                , Duration.ofSeconds(60), LocalDateTime.of(5, 5, 5, 1, 1));
+        Subtask subtask3 = new Subtask("title6", "description", Status.DONE, epic1.getId(),
+                Duration.ofSeconds(60), LocalDateTime.of(5, 5, 5, 1, 1));
         taskManager.addNewSubtask(subtask3);
 
         Epic epic2 = new Epic("title7", "description");
