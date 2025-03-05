@@ -14,15 +14,12 @@ public class CSVTaskFormat {
     public static String taskToString(Task task) {
         if (task instanceof Subtask) {
             return task.getId() + "," + task.getType() + "," + task.getTitle() + "," + task.getStatus() + ","
-                    + task.getDescription() + "," + task.getDuration().toSeconds() + "," + task.getStartTime().toString()
-                    + ",," + ((Subtask) task).getIdEpic();
-        } else if (task instanceof Epic) {
-            return task.getId() + "," + task.getType() + "," + task.getTitle() + "," + task.getStatus() + ","
-                    + task.getDescription() + "," + task.getDuration().toSeconds() + "," + task.getStartTime().toString()
-                    + "," + task.getEndTime();
+                    + task.getDescription() + "," + task.getDuration().toSeconds() + "," + task.getStartTime()
+                    + "," + task.getEndTime() + "," + ((Subtask) task).getIdEpic();
         } else {
             return task.getId() + "," + task.getType() + "," + task.getTitle() + "," + task.getStatus() + ","
-                    + task.getDescription() + "," + task.getDuration().toSeconds() + "," + task.getStartTime().toString();
+                    + task.getDescription() + "," + task.getDuration().toSeconds() + "," + task.getStartTime()
+                    + "," + task.getEndTime();
         }
     }
 
@@ -65,9 +62,5 @@ public class CSVTaskFormat {
         return Arrays.stream(value.split(","))
                 .map(Integer::parseInt)
                 .collect(Collectors.toList());
-    }
-
-    public static Task copyTask(Task task) {
-        return taskFromString(taskToString(task));
     }
 }

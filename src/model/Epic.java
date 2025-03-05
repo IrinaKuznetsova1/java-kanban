@@ -48,6 +48,12 @@ public class Epic extends Task {
         if (endTime != null) this.endTime = endTime;
     }
 
+    public Epic getCopy() {
+        Epic copyEpic = new Epic(this.id, this.title, this.description, this.status, this.duration, this.startTime, this.endTime);
+        this.getSubtasksID().forEach(copyEpic::addIdSubtask);
+        return copyEpic;
+    }
+
     @Override
     public LocalDateTime getEndTime() {
         return endTime;
@@ -61,7 +67,7 @@ public class Epic extends Task {
     @Override
     public String toString() {
         return getType() + " №" + id + " \"" + title + "\", описание: \"" + description + "\", статус \"" + status
-                + "\", ID подзадач: " + listSubtaskID + ", начало: " + dateToString(startTime) + ", продолжительность: "
-                + duration.toMinutes() + " мин., завершение: " + dateToString(endTime) + "\n";
+                + "\", ID подзадач: " + listSubtaskID + ", начало: " + startTime.toString() + ", продолжительность: "
+                + duration.toMinutes() + " мин., завершение: " + endTime.toString() + "\n";
     }
 }

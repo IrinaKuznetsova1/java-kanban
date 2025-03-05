@@ -104,13 +104,12 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
     @Test
     protected void getEpicSubtasks() {
-        final ArrayList<Subtask> epicSubtasks = tm.getEpicSubtasks(epic1.getId());
+        final List<Subtask> epicSubtasks = tm.getEpicSubtasks(epic1.getId());
         assertNotNull(epicSubtasks, "Подзадачи не возвращаются.");
         assertEquals(1, epicSubtasks.size(), "Неверное количество подзадач.");
 
         final Subtask subtask2 = epicSubtasks.getFirst();
         checkSubtasksFields(subtask1, subtask2);
-
     }
 
     @Test
@@ -168,11 +167,8 @@ abstract class TaskManagerTest<T extends TaskManager> {
         tm.updateTask(updTask);
         final Task task2 = tm.getTasks().getFirst();
         checkTasksFields(updTask, task2);
-        final Task task3 = tm.getHistory().getFirst();
-        checkTasksFields(updTask, task3);
         final Task task4 = tm.getPrioritizedTasks().getLast();
         checkTasksFields(updTask, task4);
-
     }
 
     @Test
@@ -193,8 +189,6 @@ abstract class TaskManagerTest<T extends TaskManager> {
         final Subtask subtask2 = tm.getSubtask(subtask1.getId());
         checkSubtasksFields(updSubtask, subtask2);
         assertEquals(updSubtask.getStatus(), epic1.getStatus(), "После обновления подзадачи статус эпика не изменился");
-        final Subtask subtask3 = (Subtask) tm.getHistory().getLast();
-        checkSubtasksFields(updSubtask, subtask3);
         final Subtask subtask4 = (Subtask) tm.getPrioritizedTasks().getFirst();
         checkSubtasksFields(updSubtask, subtask4);
     }

@@ -2,7 +2,6 @@ package model;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Task {
@@ -84,18 +83,8 @@ public class Task {
         return startTime.plus(duration);
     }
 
-    public String dateToString(LocalDateTime date) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
-        return date.format(formatter);
-    }
-
-    public void copyFields(Task task) {
-        setTitle(task.title);
-        setId(task.id);
-        setDescription(task.description);
-        setStatus(task.status);
-        setDuration(task.duration);
-        setStartTime(task.startTime);
+    public Task getCopy() {
+        return new Task(this.id, this.title, this.description, this.status, this.duration, this.startTime);
     }
 
     @Override
@@ -114,6 +103,6 @@ public class Task {
     @Override
     public String toString() {
         return getType() + " №" + id + " \"" + title + "\", описание: \"" + description + "\", статус \"" + status
-                + "\", начало: " + dateToString(startTime) + ", продолжительность: " + duration.toMinutes() + " мин.\n";
+                + "\", начало: " + startTime.toString() + ", продолжительность: " + duration.toMinutes() + " мин.\n";
     }
 }

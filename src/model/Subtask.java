@@ -20,6 +20,10 @@ public class Subtask extends Task {
         return idEpic;
     }
 
+    public Subtask getCopy() {
+        return new Subtask(this.id, this.title, this.description, this.status, this.idEpic, this.duration, this.startTime);
+    }
+
     @Override
     public Type getType() {
         return Type.SUBTASK;
@@ -28,7 +32,7 @@ public class Subtask extends Task {
     @Override
     public String toString() {
         return getType() + " №" + id + " \"" + title + "\", описание: \"" + description + "\", статус \"" + status
-                + "\", ID эпика - " + idEpic + ", начало: " + dateToString(startTime) + ", продолжительность: "
+                + "\", ID эпика - " + idEpic + ", начало: " + startTime.toString() + ", продолжительность: "
                 + duration.toMinutes() + " мин.\n";
     }
 }

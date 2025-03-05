@@ -16,6 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class CSVTaskFormatTest {
     Task task;
     Epic epic;
+    Epic emptyEpic;
     Subtask subtask;
     LocalDateTime start = LocalDateTime.of(2222, 12, 22, 22, 22);
     Duration duration = Duration.ofSeconds(1);
@@ -27,6 +28,7 @@ class CSVTaskFormatTest {
         task = new Task(1, "task", "desc", Status.NEW, duration, start);
         epic = new Epic(2, "epic", "desc", Status.IN_PROGRESS, duration, start, end);
         subtask = new Subtask(3, "subtask", "desc", Status.IN_PROGRESS, 2, duration, start);
+        emptyEpic = new Epic(4, "Empty epic", "");
     }
 
     @Test
@@ -40,6 +42,10 @@ class CSVTaskFormatTest {
         Epic epic1 = (Epic) CSVTaskFormat.taskFromString(epicToString);
         epic1.addIdSubtask(subtask.getId());
         TaskManagerTest.checkEpicsFields(epic, epic1);
+
+        String emptyEpicToString = CSVTaskFormat.taskToString(emptyEpic);
+        Epic emptyEpic1 = (Epic) CSVTaskFormat.taskFromString(emptyEpicToString);
+        TaskManagerTest.checkEpicsFields(emptyEpic, emptyEpic1);
 
         String subtaskToString = CSVTaskFormat.taskToString(subtask);
         Subtask subtask1 = (Subtask) CSVTaskFormat.taskFromString(subtaskToString);

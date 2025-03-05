@@ -18,9 +18,7 @@ class InMemoryHistoryManagerTest {
     InMemoryHistoryManager historyManager;
     final Task task1 = new Task(1, "Title Task1", "Description Task1", Status.NEW, Duration.ofHours(24),
             LocalDateTime.of(2000, 2, 2, 0, 0));
-    ;
     final Epic epic1 = new Epic(2, "Title Epic1", "Description Epic1");
-    ;
     final Subtask subtask1 = new Subtask(3, "Title Subtask1", "Description Subtask1", Status.IN_PROGRESS,
             2, Duration.ofHours(24), LocalDateTime.of(2222, 2, 2, 0, 0));
 
@@ -78,7 +76,6 @@ class InMemoryHistoryManagerTest {
     @Test
     public void checkOrderAfterDelete() {
         final Epic epic2 = new Epic(4, "Title Epic1", "Description Epic1");
-        ;
         final Subtask subtask2 = new Subtask(5, "Title Subtask1", "Description Subtask1",
                 Status.IN_PROGRESS, 2, Duration.ofHours(24), LocalDateTime.of(2222, 2, 2, 0, 0));
         historyManager.addTask(task1);

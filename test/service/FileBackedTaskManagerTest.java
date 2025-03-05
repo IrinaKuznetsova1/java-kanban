@@ -3,7 +3,6 @@ package service;
 import model.Epic;
 import model.Subtask;
 import model.Task;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -17,17 +16,17 @@ import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileBackedTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
+class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
     protected static File testFile;
-
-    @BeforeAll
-    protected static void createFile() throws IOException {
-        testFile = File.createTempFile("test", ".csv");
-    }
 
     @Override
     @BeforeEach
     protected void init() {
+        try {
+            testFile = File.createTempFile("test", ".csv");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         tm = new FileBackedTaskManager(testFile);
         super.init();
     }
@@ -41,7 +40,7 @@ class FileBackedTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    void loadFromFile() throws IOException {
+    void loadFromFile() {
         Epic epic = new Epic("Empty Epic", "");
         tm.addNewEpic(epic);
         TaskManager restoredTM = FileBackedTaskManager.loadFromFile(testFile);
