@@ -53,7 +53,7 @@ public class InMemoryTaskManager implements TaskManager {
         return epics.get(epicID).getSubtasksID()
                 .stream()
                 .map(subtasks::get)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
@@ -127,12 +127,6 @@ public class InMemoryTaskManager implements TaskManager {
         LocalDateTime endTime = LocalDateTime.MIN;
 
         for (Subtask sub : epicSubtasks) {
-            if (sub.getStartTime() == null || sub.getDuration() == null) continue;
-            if (sub.getStartTime().isBefore(startTime))
-                startTime = sub.getStartTime();
-            duration = duration.plus(sub.getDuration());
-            if (sub.getStartTime().plus(sub.getDuration()).isAfter(endTime))
-                endTime = sub.getStartTime().plus(sub.getDuration());
             if (sub.getStatus() == Status.NEW) {
                 checkNew = true;
             } else if (sub.getStatus() == Status.DONE) {
@@ -140,8 +134,18 @@ public class InMemoryTaskManager implements TaskManager {
             } else {
                 checkNew = false;
                 checkDone = false;
-                break;
             }
+            if (sub.getStartTime() == null) continue;
+            if (sub.getStartTime().isBefore(startTime))
+                startTime = sub.getStartTime();
+            if (sub.getDuration() == null) sub.setDuration(Duration.ZERO);
+            duration = duration.plus(sub.getDuration());
+            if (sub.getStartTime().plus(sub.getDuration()).isAfter(endTime))
+                endTime = sub.getStartTime().plus(sub.getDuration());
+        }
+        if (startTime == LocalDateTime.MAX) {
+            startTime = null;
+            endTime = null;
         }
         epic.setStartTime(startTime);
         epic.setDuration(duration);
