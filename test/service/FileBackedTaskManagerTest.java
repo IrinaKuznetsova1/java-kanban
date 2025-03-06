@@ -1,7 +1,6 @@
 package service;
 
 import model.Epic;
-import model.Status;
 import model.Subtask;
 import model.Task;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,86 +11,72 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class FileBackedTaskManagerTest {
-    File testFile;
-    TaskManager tm;
-    Task task;
-    Epic epic;
-    Subtask subtask;
+class FileBackedTaskManagerTest extends TaskManagerTest<FileBackedTaskManager> {
+    protected static File testFile;
 
+    @Override
     @BeforeEach
-    void create() throws IOException {
-        testFile = File.createTempFile("test", ".csv");
+    protected void init() {
+        try {
+            testFile = File.createTempFile("test", ".csv");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         tm = new FileBackedTaskManager(testFile);
-        task = new Task("task", "desc", Status.NEW);
-        epic = new Epic("epic", "desc");
-        subtask = new Subtask("subtask", "desc", Status.IN_PROGRESS, 2);
-        tm.addNewTask(task);
-        tm.addNewEpic(epic);
-        tm.addNewSubtask(subtask);
-        tm.getTask(1);
-        tm.getEpic(2);
-        tm.getSubtask(3);
+        super.init();
     }
 
     @Test
     void save() throws IOException {
         BufferedReader br = new BufferedReader(new FileReader(testFile, StandardCharsets.UTF_8));
-        List<String> readLines = new ArrayList<>();
-        while (br.ready()) {
-            readLines.add(br.readLine());
-        }
-        br.close();
+        final List<String> readLines = br.lines().skip(1).collect(Collectors.toList());
         System.out.println(readLines);
         assertFalse(readLines.isEmpty(), "Задачи не сохраняются в файл test.csv");
     }
 
     @Test
-    void loadFromFile() throws IOException {
+    void loadFromFile() {
+        Epic epic = new Epic("Empty Epic", "");
+        tm.addNewEpic(epic);
         TaskManager restoredTM = FileBackedTaskManager.loadFromFile(testFile);
 
         List<Task> tasks = restoredTM.getTasks();
         assertEquals(1, tasks.size(), "Task не восстановлена в Map<Integer, Task> tasks из файла test.csv");
         List<Epic> epics = restoredTM.getEpics();
-        assertEquals(1, epics.size(), "Epic не восстановлен в Map<Integer, Epic> epics из файла test.csv");
+        assertEquals(2, epics.size(), "Epic не восстановлен в Map<Integer, Epic> epics из файла test.csv");
         List<Subtask> subtasks = restoredTM.getSubtasks();
         assertEquals(1, subtasks.size(), "Subtask не восстановлена в Map<Integer, Subtask> subtasks из файла test.csv");
 
-        Task task1 = restoredTM.getTask(1);
-        assertEquals(task.getId(), task1.getId(), "ID task и task1 после загрузки TM из файла test.csv не совпадают.");
-        assertEquals(task.getTitle(), task1.getTitle(), "title task и task1 после загрузки TM из файла test.csv не совпадают.");
-        assertEquals(task.getDescription(), task1.getDescription(), "description после загрузки TM из файла test.csv не совпадают.");
-        assertEquals(task.getStatus(), task1.getStatus(), "status task и task1 после загрузки TM из файла test.csv не совпадают.");
-        assertEquals(task.getType(), task1.getType(), "type task и task1 после загрузки TM из файла test.csv не совпадают.");
+        Task task2 = restoredTM.getTask(1);
+        checkTasksFields(task1, task2);
 
-        Epic epic1 = restoredTM.getEpic(2);
-        assertEquals(epic.getId(), epic1.getId(), "ID epic и epic1 после загрузки TM из файла test.csv не совпадают.");
-        assertEquals(epic.getSubtasksID().getFirst(), epic1.getSubtasksID().getFirst(), "ID подзадач epic и epic1 после загрузки TM из файла test.csv не совпадают.");
-        assertEquals(epic.getTitle(), epic1.getTitle(), "title epic и epic1 после загрузки TM из файла test.csv не совпадают.");
-        assertEquals(epic.getDescription(), epic1.getDescription(), "description epic и epic1 после загрузки TM из файла test.csv не совпадают.");
-        assertEquals(epic.getStatus(), epic1.getStatus(), "status epic и epic1 после загрузки TM из файла test.csv не совпадают.");
-        assertEquals(epic.getType(), epic1.getType(), "type epic и epic1 после загрузки TM из файла test.csv не совпадают.");
+        Epic epic2 = restoredTM.getEpic(2);
+        checkEpicsFields(epic1, epic2);
 
-        Subtask subtask1 = restoredTM.getSubtask(3);
-        assertEquals(subtask.getId(), subtask1.getId(), "ID subtask и subtask1 после загрузки TM из файла test.csv не совпадают.");
-        assertEquals(subtask.getTitle(), subtask1.getTitle(), "title subtask и subtask1 после загрузки TM из файла test.csv не совпадают.");
-        assertEquals(subtask.getDescription(), subtask1.getDescription(), "description subtask и subtask1 после загрузки TM из файла test.csv не совпадают.");
-        assertEquals(subtask.getStatus(), subtask1.getStatus(), "status subtask и subtask1 после загрузки TM из файла test.csv не совпадают.");
-        assertEquals(subtask.getType(), subtask1.getType(), "type subtask и subtask1 после загрузки TM из файла test.csv не совпадают.");
-        assertEquals(subtask.getIdEpic(), subtask1.getIdEpic(), "idEpic subtask и subtask1 после загрузки TM из файла test.csv не совпадают.");
+        Epic emptyEpic = restoredTM.getEpic(4);
+        checkEpicsFields(epic, emptyEpic);
+
+        Subtask subtask2 = restoredTM.getSubtask(3);
+        checkSubtasksFields(subtask1, subtask2);
 
         List<Task> testHistory = restoredTM.getHistory();
-        Task task2 = testHistory.getFirst();
-        assertEquals(task.getId(), task2.getId(), "ID task и task2 после загрузки истории TM из файла test.csv не совпадают.");
-        Epic epic2 = (Epic) testHistory.get(1);
-        assertEquals(epic.getId(), epic2.getId(), "ID epic и epic2 после загрузки истории TM из файла test.csv не совпадают.");
-        Subtask subtask2 = (Subtask) testHistory.getLast();
-        assertEquals(subtask.getId(), subtask2.getId(), "ID subtask и subtask2 после загрузки истории TM из файла test.csv не совпадают.");
+        Task task3 = testHistory.getFirst();
+        checkTasksFields(task1, task3);
+        Epic epic3 = (Epic) testHistory.get(1);
+        checkEpicsFields(epic1, epic3);
+        Subtask subtask3 = (Subtask) testHistory.getLast();
+        checkSubtasksFields(subtask1, subtask3);
+
+        List<Task> priority = restoredTM.getPrioritizedTasks();
+        Task task4 = priority.getFirst();
+        checkTasksFields(task1, task4);
+        Subtask subtask4 = (Subtask) priority.getLast();
+        checkSubtasksFields(subtask1, subtask4);
     }
 
     @Test
@@ -101,14 +86,18 @@ class FileBackedTaskManagerTest {
         assertTrue(restoredTM.getEpics().isEmpty(), "Map <Integer, Epic> epics не пуста.");
         assertTrue(restoredTM.getSubtasks().isEmpty(), "Map <Integer, Subtask> subtasks не пуста.");
         assertTrue(restoredTM.getHistory().isEmpty(), "История не пуста.");
+        assertTrue(restoredTM.getPrioritizedTasks().isEmpty(), "Set<Task> tasksByPriority не пуст.");
     }
 
     @Test
-    void updateSubtask() {
-        Subtask updSubtask = new Subtask(3, subtask.getTitle(), subtask.getDescription(), Status.NEW, epic.getId());
-        tm.updateSubtask(updSubtask);
-        assertEquals(Status.NEW, tm.getSubtask(3).getStatus(), "Статус подзадачи не обновлен.");
-        assertEquals(Status.NEW, tm.getEpic(2).getStatus(), "Статус эпика не обновлен.");
-
+    public void testException() throws IOException {
+        File excFile = File.createTempFile("Exception-test", ".csv");
+        excFile.setReadOnly();
+        Exception exception = assertThrows(ManagerSaveException.class, () -> {
+            FileBackedTaskManager fb = new FileBackedTaskManager(excFile);
+            fb.addNewTask(task1);
+        }, "Попытка записи в файл, доступного только для чтения, должна приводить к исключению.");
+        assertTrue(exception.getMessage().contains("Ошибка при чтении файла - "));
     }
+
 }

@@ -8,8 +8,10 @@ import model.Task;
 import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
-import java.util.ArrayList;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FileBackedTaskManager extends InMemoryTaskManager {
     private final File file;
@@ -21,13 +23,9 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public static FileBackedTaskManager loadFromFile(File file) {
         final FileBackedTaskManager restoredTaskManager = new FileBackedTaskManager(file);
         try (BufferedReader br = new BufferedReader(new FileReader(file, StandardCharsets.UTF_8))) {
-            final List<String> readLines = new ArrayList<>();
-            while (br.ready()) {
-                readLines.add(br.readLine());
-            }
+            final List<String> readLines = br.lines().skip(1).collect(Collectors.toList());
             if (readLines.isEmpty()) return restoredTaskManager;
             final String idsHistory = readLines.removeLast();
-            readLines.removeFirst();
             addTasks(readLines, idsHistory, restoredTaskManager);
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка при чтении файла - " + e.getMessage());
@@ -44,10 +42,12 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
                 tm.epics.put(id, epic);
             } else if (task instanceof Subtask subtask) {
                 tm.subtasks.put(id, subtask);
+                tm.tasksByPriority.add(subtask);
                 final Epic epic = tm.epics.get(subtask.getIdEpic());
                 epic.addIdSubtask(subtask.getId());
             } else {
                 tm.tasks.put(id, task);
+                tm.tasksByPriority.add(task);
             }
         }
 
@@ -68,7 +68,7 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
 
     protected void save() {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file, StandardCharsets.UTF_8))) {
-            writer.write("id,type,name,status,description,epic\n");
+            writer.write("id,type,name,status,description,duration,startTime,endTime,epic\n");
             for (Task task : tasks.values()) {
                 writer.write(CSVTaskFormat.taskToString(task) + "\n");
             }
@@ -185,18 +185,23 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
         TaskManager taskManager = Managers.getDefault();
 
         // добавление задач в taskManager
-        Task task1 = new Task("title1", "description", Status.NEW);
+        Task task1 = new Task("title1", "description", Status.NEW, Duration.ofSeconds(60),
+                LocalDateTime.of(1, 1, 1, 1, 1));
         taskManager.addNewTask(task1);
-        Task task2 = new Task("title2", "description", Status.IN_PROGRESS);
+        Task task2 = new Task("title2", "description", Status.IN_PROGRESS, Duration.ofSeconds(60),
+                LocalDateTime.of(2, 2, 2, 1, 1));
         taskManager.addNewTask(task2);
 
         Epic epic1 = new Epic("title3", "description");
         taskManager.addNewEpic(epic1);
-        Subtask subtask1 = new Subtask("title4", "description", Status.DONE, epic1.getId());
+        Subtask subtask1 = new Subtask("title4", "description", Status.DONE, epic1.getId(),
+                Duration.ofSeconds(60), LocalDateTime.of(3, 3, 3, 1, 1));
         taskManager.addNewSubtask(subtask1);
-        Subtask subtask2 = new Subtask("title5", "description", Status.NEW, epic1.getId());
+        Subtask subtask2 = new Subtask("title5", "description", Status.NEW, epic1.getId(),
+                Duration.ofSeconds(60), LocalDateTime.of(4, 4, 4, 1, 1));
         taskManager.addNewSubtask(subtask2);
-        Subtask subtask3 = new Subtask("title6", "description", Status.DONE, epic1.getId());
+        Subtask subtask3 = new Subtask("title6", "description", Status.DONE, epic1.getId(),
+                Duration.ofSeconds(60), LocalDateTime.of(5, 5, 5, 1, 1));
         taskManager.addNewSubtask(subtask3);
 
         Epic epic2 = new Epic("title7", "description");
