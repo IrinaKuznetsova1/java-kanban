@@ -1,9 +1,8 @@
 id,type,name,status,description,duration,startTime,endTime,epic
-1,TASK,title1,NEW,description,1,0001-01-01T01:01
-2,TASK,title2,IN_PROGRESS,description,1,0002-02-02T01:01
-3,EPIC,title3,IN_PROGRESS,description,3,0003-03-03T01:01,0005-05-05T01:02
-7,EPIC,title7,NEW,description,0,0001-01-01T00:00,0001-01-01T00:00
-4,SUBTASK,title4,DONE,description,1,0003-03-03T01:01,,3
-5,SUBTASK,title5,NEW,description,1,0004-04-04T01:01,,3
-6,SUBTASK,title6,DONE,description,1,0005-05-05T01:01,,3
+1,TASK,Title Task1,NEW,Description Task1,3600,2000-02-02T00:00,2000-02-02T01:00
+2,TASK,Title Task2,IN_PROGRESS,Description Task2,3600,2001-02-02T00:00,2001-02-02T01:00
+3,EPIC,Title Epic1,IN_PROGRESS,Description Epic1,7200,2222-02-02T00:00,2225-02-02T01:00
+4,EPIC,Title Epic2,NEW,Description Epic2,0,0001-01-01T00:00,0001-01-01T00:00
+5,SUBTASK,Title Subtask1,NEW,Description Subtask1,3600,2222-02-02T00:00,2222-02-02T01:00,3
+6,SUBTASK,Title Subtask2,IN_PROGRESS,Description Subtask2,3600,2225-02-02T00:00,2225-02-02T01:00,3
 История пуста.

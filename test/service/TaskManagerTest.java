@@ -15,7 +15,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-abstract class TaskManagerTest<T extends TaskManager> {
+public abstract class TaskManagerTest<T extends TaskManager> {
     protected T tm;
     protected Task task1 = new Task("Title Task1", "Description Task1", Status.NEW, Duration.ofHours(24),
             LocalDateTime.of(2000, 2, 2, 0, 0));
@@ -40,7 +40,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         tm.deleteSubtasks();
     }
 
-    protected static void checkTasksFields(Task task1, Task testTask) {
+    public static void checkTasksFields(Task task1, Task testTask) {
         assertEquals(task1.getId(), testTask.getId(), "ID task1 и task2 не совпадают.");
         assertEquals(task1.getTitle(), testTask.getTitle(), "title task1 и task2 не совпадают.");
         assertEquals(task1.getDescription(), testTask.getDescription(), "description task1 и task2 не совпадают.");
@@ -51,7 +51,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         assertEquals(task1.getEndTime(), testTask.getEndTime(), "endTime task1 и task2 не совпадают.");
     }
 
-    protected static void checkEpicsFields(Epic epic1, Epic testEpic) {
+    public static void checkEpicsFields(Epic epic1, Epic testEpic) {
         assertEquals(epic1.getId(), testEpic.getId(), "ID epic1 и epic2 не совпадают.");
         assertEquals(epic1.getTitle(), testEpic.getTitle(), "title epic1 и epic2 не совпадают.");
         assertEquals(epic1.getDescription(), testEpic.getDescription(), "description epic1 и epic2 не совпадают.");
@@ -66,7 +66,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
         }
     }
 
-    protected static void checkSubtasksFields(Subtask subtask1, Subtask testSubtask) {
+    public static void checkSubtasksFields(Subtask subtask1, Subtask testSubtask) {
         assertEquals(subtask1.getId(), testSubtask.getId(), "ID subtask1 и subtask2 не совпадают.");
         assertEquals(subtask1.getTitle(), testSubtask.getTitle(), "title subtask1 и subtask2 не совпадают.");
         assertEquals(subtask1.getDescription(), testSubtask.getDescription(), "description subtask1 и subtask2 не совпадают.");
