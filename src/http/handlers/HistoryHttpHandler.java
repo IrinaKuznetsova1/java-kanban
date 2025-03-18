@@ -14,7 +14,6 @@ public class HistoryHttpHandler extends BaseHttpHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-
         switch (exchange.getRequestMethod()) {
             case "GET":
                 if (getLastPartOfPath(exchange).equals("history") && getPartsOfPathNumber(exchange) == 2) {
@@ -29,7 +28,6 @@ public class HistoryHttpHandler extends BaseHttpHandler implements HttpHandler {
             default:
                 sendText(exchange, "Метод запроса не поддерживается сервером.", 405);
                 System.out.println("Неизвестный метод.");
-
         }
     }
 }
