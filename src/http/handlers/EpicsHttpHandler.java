@@ -18,7 +18,6 @@ public class EpicsHttpHandler extends BaseHttpHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-
         switch (exchange.getRequestMethod()) {
             case "GET":
                 if (getLastPartOfPath(exchange).equals("epics") && getPartsOfPathNumber(exchange) == 2) {

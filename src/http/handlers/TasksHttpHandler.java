@@ -19,7 +19,6 @@ public class TasksHttpHandler extends BaseHttpHandler implements HttpHandler {
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-
         switch (exchange.getRequestMethod()) {
             case "GET":
                 if (getLastPartOfPath(exchange).equals("tasks") && getPartsOfPathNumber(exchange) == 2) {

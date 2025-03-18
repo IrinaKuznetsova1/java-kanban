@@ -19,7 +19,6 @@ public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler 
 
     @Override
     public void handle(HttpExchange exchange) throws IOException {
-
         switch (exchange.getRequestMethod()) {
             case "GET":
                 if (getLastPartOfPath(exchange).equals("subtasks") && getPartsOfPathNumber(exchange) == 2) {
