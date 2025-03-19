@@ -130,11 +130,16 @@ class HttpServerEpicTest {
         assertEquals(1, epicsFromManager.size(), "Некорректное количество эпиков");
         TaskManagerTest.checkEpicsFields(epic, epicsFromManager.getFirst());
 
-        //проверка код ответа 400
+        //проверка код ответа 400 при некорректном пути
         URI url2 = URI.create("http://localhost:8080/epics/" + "String");
         HttpRequest request2 = HttpRequest.newBuilder().uri(url2).POST(HttpRequest.BodyPublishers.ofString(epicJson)).build();
         HttpResponse<String> response2 = client.send(request2, HttpResponse.BodyHandlers.ofString());
         assertEquals(400, response2.statusCode());
+
+        //проверка код ответа 400 при пустом запросе
+        HttpRequest request3 = HttpRequest.newBuilder().uri(url).POST(HttpRequest.BodyPublishers.ofString("")).build();
+        HttpResponse<String> response3 = client.send(request3, HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, response3.statusCode());
     }
 
     @Test

@@ -77,6 +77,10 @@ public class SubtasksHttpHandler extends BaseHttpHandler implements HttpHandler 
 
     private void handlePostSubtask(HttpExchange exchange) throws IOException {
         final Subtask subtask = gson.fromJson(readText(exchange), Subtask.class);
+        if (subtask == null) {
+            sendText(exchange, "Отправлен пустой запрос.", 400);
+            return;
+        }
         if (subtask.getId() == 0) {
             try {
                 tm.addNewSubtask(subtask);

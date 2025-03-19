@@ -95,6 +95,10 @@ public class EpicsHttpHandler extends BaseHttpHandler implements HttpHandler {
 
     private void handlePostEpic(HttpExchange exchange) throws IOException {
         final Epic epicJson = gson.fromJson(readText(exchange), Epic.class);
+        if (epicJson == null) {
+            sendText(exchange, "Отправлен пустой запрос.", 400);
+            return;
+        }
         if (epicJson.getId() == 0) {
             try {
                 final Epic epic = new Epic(epicJson.getTitle(), epicJson.getDescription());

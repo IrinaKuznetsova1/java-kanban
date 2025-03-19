@@ -13,12 +13,12 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 
-public class BaseHttpHandler {
+abstract class BaseHttpHandler {
     protected static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8;
-    protected Gson gson = HttpTaskServer.getGson();
+    protected final Gson gson = HttpTaskServer.getGson();
     protected final TaskManager tm;
 
-    public BaseHttpHandler(TaskManager tm) {
+    BaseHttpHandler(TaskManager tm) {
         this.tm = tm;
     }
 
@@ -54,7 +54,7 @@ public class BaseHttpHandler {
         try (InputStream inputStream = exchange.getRequestBody()) {
             return new String(inputStream.readAllBytes(), DEFAULT_CHARSET);
         } catch (IOException e) {
-            throw new ManagerSaveException("Ошибка при обработке запроса.");
+            throw new ManagerSaveException("Ошибка обработки запроса");
         }
     }
 }

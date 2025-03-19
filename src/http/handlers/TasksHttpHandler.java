@@ -78,6 +78,10 @@ public class TasksHttpHandler extends BaseHttpHandler implements HttpHandler {
 
     private void handlePostTask(HttpExchange exchange) throws IOException {
         final Task task = gson.fromJson(readText(exchange), Task.class);
+        if (task == null) {
+            sendText(exchange, "Отправлен пустой запрос.", 400);
+            return;
+        }
         if (task.getId() == 0) {
             try {
                 tm.addNewTask(task);

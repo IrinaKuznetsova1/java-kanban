@@ -122,11 +122,16 @@ class HttpServerSubtaskTest {
         HttpResponse<String> response1 = client.send(request1, HttpResponse.BodyHandlers.ofString());
         assertEquals(406, response1.statusCode());
 
-        //проверка код ответа 400
+        //проверка код ответа 400 при некорректном пути
         URI url2 = URI.create("http://localhost:8080/subtasks/" + "String");
         HttpRequest request2 = HttpRequest.newBuilder().uri(url2).POST(HttpRequest.BodyPublishers.ofString(subtaskJson1)).build();
         HttpResponse<String> response2 = client.send(request2, HttpResponse.BodyHandlers.ofString());
         assertEquals(400, response2.statusCode());
+
+        //проверка код ответа 400 при пустом запросе
+        HttpRequest request3 = HttpRequest.newBuilder().uri(url).POST(HttpRequest.BodyPublishers.ofString("")).build();
+        HttpResponse<String> response3 = client.send(request3, HttpResponse.BodyHandlers.ofString());
+        assertEquals(400, response3.statusCode());
     }
 
     @Test
