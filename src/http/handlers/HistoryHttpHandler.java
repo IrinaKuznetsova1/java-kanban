@@ -20,8 +20,7 @@ public class HistoryHttpHandler extends BaseHttpHandler implements HttpHandler {
                     final String response = gson.toJson(tm.getHistory());
                     exchange.getResponseHeaders().add("Content-Type", "application/json;charset=utf-8");
                     sendText(exchange, response, 200);
-                }
-                else {
+                } else {
                     sendText(exchange, "Неизвестный запрос.", 400);
                 }
                 break;
