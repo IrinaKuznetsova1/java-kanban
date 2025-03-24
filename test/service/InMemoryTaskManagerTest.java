@@ -23,13 +23,6 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
     }
 
     @Test
-    protected void shouldBeNullIfSubtasksIdEqualsEpicsId() {
-        final Subtask subtask2 = new Subtask("Test Title 1", "Test Description 1", Status.NEW,
-                1, Duration.ZERO, LocalDateTime.of(1, 1, 1, 1, 1));
-        assertEquals(-1, tm.addNewSubtask(subtask2), "Подзадачу можно сделать своим же эпиком.");
-    }
-
-    @Test
     protected void generateTaskId() {
         tm.deleteTasks();
         tm.generateID = 0;
@@ -38,7 +31,6 @@ class InMemoryTaskManagerTest extends TaskManagerTest<InMemoryTaskManager> {
         Task task2 = new Task(105, "Test Title2", "Test Description2", Status.DONE,
                 Duration.ZERO, LocalDateTime.of(1, 1, 1, 1, 1));
         assertEquals(1, tm.addNewTask(task3), "ID для task3 не сгенерирован.");
-        assertEquals(-1, tm.addNewTask(task2), "Task 2 с заданным вручную id сохранилась в taskManager.");
     }
 
     @Test

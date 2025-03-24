@@ -1,15 +1,12 @@
 package service;
 
+import exceptions.ManagerSaveException;
 import model.Epic;
-import model.Status;
 import model.Subtask;
 import model.Task;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
-import java.time.Duration;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -179,40 +176,6 @@ public class FileBackedTaskManager extends InMemoryTaskManager {
     public void deleteSubtasks() {
         super.deleteSubtasks();
         save();
-    }
-
-    public static void main(String[] args) {
-        TaskManager taskManager = Managers.getDefault();
-
-        // добавление задач в taskManager
-        Task task1 = new Task("title1", "description", Status.NEW, Duration.ofSeconds(60),
-                LocalDateTime.of(1, 1, 1, 1, 1));
-        taskManager.addNewTask(task1);
-        Task task2 = new Task("title2", "description", Status.IN_PROGRESS, Duration.ofSeconds(60),
-                LocalDateTime.of(2, 2, 2, 1, 1));
-        taskManager.addNewTask(task2);
-
-        Epic epic1 = new Epic("title3", "description");
-        taskManager.addNewEpic(epic1);
-        Subtask subtask1 = new Subtask("title4", "description", Status.DONE, epic1.getId(),
-                Duration.ofSeconds(60), LocalDateTime.of(3, 3, 3, 1, 1));
-        taskManager.addNewSubtask(subtask1);
-        Subtask subtask2 = new Subtask("title5", "description", Status.NEW, epic1.getId(),
-                Duration.ofSeconds(60), LocalDateTime.of(4, 4, 4, 1, 1));
-        taskManager.addNewSubtask(subtask2);
-        Subtask subtask3 = new Subtask("title6", "description", Status.DONE, epic1.getId(),
-                Duration.ofSeconds(60), LocalDateTime.of(5, 5, 5, 1, 1));
-        taskManager.addNewSubtask(subtask3);
-
-        Epic epic2 = new Epic("title7", "description");
-        taskManager.addNewEpic(epic2);
-
-        TaskManager restoredTM = FileBackedTaskManager.loadFromFile(Paths.get("./resources/task.csv").toFile());
-
-        // проверить восстановление задач
-        System.out.println(restoredTM.getTasks());
-        System.out.println(restoredTM.getEpics());
-        System.out.println(restoredTM.getSubtasks());
     }
 
 }
